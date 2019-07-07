@@ -17,25 +17,25 @@ func isMn(r rune) bool {
 	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
 }
 
-func (in Text) Stdr() (out Text) {
+func (in *Text) Stdr() (out Text) {
 	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
-	tmp, _, _ := transform.String(t, string(in))
+	tmp, _, _ := transform.String(t, string(*in))
 	out = Text(tmp)
 	out = Text(strings.ToLower(string(out)))
 	return
 }
 
-func (str Text) Frekvence() (fr map[rune]uint64) { // frekvence znaků
+func (str *Text) Frekvence() (fr map[rune]uint64) { // frekvence znaků
 	fr = make(map[rune]uint64)
-	for _, s := range str {
+	for _, s := range *str {
 		fr[s]++
 	}
 	return
 }
 
-func (str Text) Words() (w uint64) { // Spočítá slova v textu.
+func (str *Text) Words() (w uint64) { // Spočítá slova v textu.
 	var prevW bool = false
-	for _, s := range str {
+	for _, s := range *str {
 		if (s == ' ' || s == '\t' || s == '\n') && prevW == true {
 			prevW = false
 		} else if s != ' ' && s != '\t' && s != '\n' && prevW == false {
