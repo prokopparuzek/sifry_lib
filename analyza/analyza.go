@@ -60,8 +60,26 @@ func (str *Text) Words() (w uint64) { // Spočítá slova v textu. dle WhiteSpac
 	return
 }
 
-func (str Text) Slabiky() (sl uint64) {
+func (str Text) Slabiky() (sl uint64) { // Spočítá slabiky
 	str = str.Stdr()
+	words := strings.Split(string(str), " ")
+	for _, w := range words {
+		for i, c := range w {
+			switch {
+			case isIn(c, samohlasky):
+				if isIn(rune(w[i+1]), samohlasky) && i != 2 && i != 3 {
+				} else {
+					sl++
+				}
+			case isIn(c, slabtvrsouh):
+				if i > 0 {
+					if isIn(rune(w[i-1]), souhlasky) && isIn(rune(w[i+1]), souhlasky) {
+						sl++
+					}
+				}
+			}
+		}
+	}
 	return
 }
 
@@ -80,4 +98,11 @@ func (str *Text) Sentences() (se uint64) { // spočítá věty v textu, končí 
 		}
 	}
 	return
+}
+
+func (str *Text) Flesh() float64 {
+	var sl float64 = float64(str.Slabiky())
+	var w float64 = float64(str.Words())
+	var se float64 = float64(str.Sentences())
+	return 206.835 - (1.015 * (w / se)) - 84.6*(sl/w)
 }
