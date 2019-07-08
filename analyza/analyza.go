@@ -127,3 +127,7 @@ func (str *Text) Lines() (ln uint64) {
 	}
 	return
 }
+
+func (str *Text) Chars() uint64 {
+	return uint64(len(*str))
+}
