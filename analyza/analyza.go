@@ -63,7 +63,6 @@ func (str *Text) Words() (w uint64) { // Spočítá slova v textu. dle WhiteSpac
 func (str Text) Slabiky() (sl uint64) { // Spočítá slabiky
 	str = str.Stdr()
 	words := strings.Fields(string(str))
-	println(words)
 	for _, w := range words {
 		for i, c := range w {
 			switch {
