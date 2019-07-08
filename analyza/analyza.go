@@ -62,18 +62,31 @@ func (str *Text) Words() (w uint64) { // Spočítá slova v textu. dle WhiteSpac
 
 func (str Text) Slabiky() (sl uint64) { // Spočítá slabiky
 	str = str.Stdr()
-	words := strings.Split(string(str), " ")
+	words := strings.Fields(string(str))
+	println(words)
 	for _, w := range words {
 		for i, c := range w {
 			switch {
 			case isIn(c, samohlasky):
-				if isIn(rune(w[i+1]), samohlasky) && i != 2 && i != 3 {
+				if i < len(w)-1 {
+					if isIn(rune(w[i+1]), samohlasky) && i != 2 && i != 3 {
+					} else {
+						sl++
+					}
 				} else {
 					sl++
 				}
 			case isIn(c, slabtvrsouh):
-				if i > 0 {
+				if i > 0 && i < len(w)-1 {
 					if isIn(rune(w[i-1]), souhlasky) && isIn(rune(w[i+1]), souhlasky) {
+						sl++
+					}
+				} else if i > 0 {
+					if isIn(rune(w[i-1]), souhlasky) {
+						sl++
+					}
+				} else if i < len(w)-1 {
+					if isIn(rune(w[i+1]), souhlasky) {
 						sl++
 					}
 				}
