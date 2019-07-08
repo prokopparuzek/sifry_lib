@@ -118,3 +118,12 @@ func (str *Text) Flesh() float64 {
 	var se float64 = float64(str.Sentences())
 	return 206.835 - (1.015 * (w / se)) - 84.6*(sl/w)
 }
+
+func (str *Text) Lines() (ln uint64) {
+	for _, c := range *str {
+		if c == '\n' {
+			ln++
+		}
+	}
+	return
+}
