@@ -11,9 +11,9 @@ type Text string
 
 var samohlasky = []rune{'a', 'e', 'i', 'o', 'u'}
 var souhlasky = []rune{'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'v', 'z'}
-var slabtvrsouh = []rune{'r', 'l', 'm'} // slabikotvorné souhlásky
-var konce = []rune{'.', '!', '?'}       // Konce vět
-var whiteS = []rune{' ', '\n', '\t'}    // bílé znaky
+var slabtvrsouh = []rune{'r', 'l'}   // slabikotvorné souhlásky
+var konce = []rune{'.', '!', '?'}    // Konce vět
+var whiteS = []rune{' ', '\n', '\t'} // bílé znaky
 
 func isIn(what rune, in []rune) bool {
 	for _, s := range in {
