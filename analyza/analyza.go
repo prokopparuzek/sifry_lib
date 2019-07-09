@@ -145,8 +145,8 @@ func (str *Text) Chars() uint64 { // Spočítá znaky.
 	return uint64(len(*str))
 }
 
-func (str *Text) AlphaD() { // Odstraní vše co není číslo || písmeno(ASCII)
-	reg, err := regexp.Compile("[^A-Za-z0-9]+")
+func (str *Text) AlphaD() { // Odstraní vše co není číslo || písmeno(ASCII) || bílý znak
+	reg, err := regexp.Compile("[^A-Za-z0-9 \t\n]+")
 	if err != nil {
 		log.Fatal("Nelze zkompilovat regex!")
 	}
