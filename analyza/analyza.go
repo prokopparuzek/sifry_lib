@@ -3,6 +3,8 @@ package analyza
 import (
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
+	"log"
+	"regexp"
 	"strings"
 	"unicode"
 )
@@ -89,6 +91,8 @@ func (str Text) Slabiky() (sl uint64) { // Spočítá slabiky
 						sl++
 					}
 				}
+			case c == 'm' && i == len(w)-1:
+				sl++
 			}
 		}
 	}
@@ -130,4 +134,18 @@ func (str *Text) Lines() (ln uint64) {
 
 func (str *Text) Chars() uint64 {
 	return uint64(len(*str))
+}
+
+func (str *Text) AlphaD() { // Odstraní vše co není číslo || písmeno(ASCII)
+	reg, err := regexp.Compile("[^A-Za-z0-9]+")
+	if err != nil {
+		log.Fatal("Nelze zkompilovat regex!")
+	}
+	*str = Text(reg.ReplaceAllString(string(*str), ""))
+}
+
+func (str *Text) RemoveWS() { // Odstraní bílé znaky
+	*str = Text(strings.Replace(string(*str), " ", "", -1))
+	*str = Text(strings.Replace(string(*str), "\t", "", -1))
+	*str = Text(strings.Replace(string(*str), "\n", "", -1))
 }
