@@ -30,7 +30,7 @@ func isMn(r rune) bool {
 	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
 }
 
-func (in *Text) Stdr() (out Text) { // převede na málá písmena a pouze ASCII
+func (in *Text) Stdr() (out Text) { // převede na malá písmena a pouze ASCII
 	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
 	tmp, _, _ := transform.String(t, string(*in))
 	out = Text(tmp)
@@ -41,6 +41,15 @@ func (in *Text) Stdr() (out Text) { // převede na málá písmena a pouze ASCII
 func (str *Text) Frekvence() (fr map[rune]uint64) { // frekvence znaků
 	fr = make(map[rune]uint64)
 	for _, s := range *str {
+		fr[s]++
+	}
+	return
+}
+
+func (str *Text) FrekvenceSlov() (fr map[string]uint64) { // frekvence slov
+	fr = make(map[string]uint64)
+	w := strings.Fields(string(*str))
+	for _, s := range w {
 		fr[s]++
 	}
 	return
@@ -116,14 +125,14 @@ func (str *Text) Sentences() (se uint64) { // spočítá věty v textu, končí 
 	return
 }
 
-func (str *Text) Flesh() float64 {
+func (str *Text) Flesh() float64 { // spočítá Fleshův index čitelnosti
 	var sl float64 = float64(str.Slabiky())
 	var w float64 = float64(str.Words())
 	var se float64 = float64(str.Sentences())
 	return 206.835 - (1.015 * (w / se)) - 84.6*(sl/w)
 }
 
-func (str *Text) Lines() (ln uint64) {
+func (str *Text) Lines() (ln uint64) { // Spočítá řádky.
 	for _, c := range *str {
 		if c == '\n' {
 			ln++
@@ -132,7 +141,7 @@ func (str *Text) Lines() (ln uint64) {
 	return
 }
 
-func (str *Text) Chars() uint64 {
+func (str *Text) Chars() uint64 { // Spočítá znaky.
 	return uint64(len(*str))
 }
 
