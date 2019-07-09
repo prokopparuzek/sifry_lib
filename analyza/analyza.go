@@ -38,10 +38,10 @@ func (in *Text) Stdr() (out Text) { // převede na malá písmena a pouze ASCII
 	return
 }
 
-func (str *Text) Frekvence() (fr map[rune]uint64) { // frekvence znaků
-	fr = make(map[rune]uint64)
+func (str *Text) Frekvence() (fr map[string]uint64) { // frekvence znaků
+	fr = make(map[string]uint64)
 	for _, s := range *str {
-		fr[s]++
+		fr[string(s)]++
 	}
 	return
 }
