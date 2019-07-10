@@ -1,15 +1,9 @@
 package analyza
 
 import (
-	"golang.org/x/text/transform"
-	"golang.org/x/text/unicode/norm"
-	"log"
-	"regexp"
+	"prokop/sifry/change"
 	"strings"
-	"unicode"
 )
-
-type Text string
 
 var samohlasky = []rune{'a', 'e', 'i', 'o', 'u'}
 var souhlasky = []rune{'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'v', 'z'}
@@ -26,19 +20,7 @@ func isIn(what rune, in []rune) bool {
 	return false
 }
 
-func isMn(r rune) bool {
-	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
-}
-
-func (in *Text) Stdr() (out Text) { // převede na malá písmena a pouze ASCII
-	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
-	tmp, _, _ := transform.String(t, string(*in))
-	out = Text(tmp)
-	out = Text(strings.ToLower(string(out)))
-	return
-}
-
-func (str *Text) Frekvence() (fr map[string]uint64) { // frekvence znaků
+func Frekvence(str *string) (fr map[string]uint64) { // frekvence znaků
 	fr = make(map[string]uint64)
 	for _, s := range *str {
 		fr[string(s)]++
@@ -46,16 +28,16 @@ func (str *Text) Frekvence() (fr map[string]uint64) { // frekvence znaků
 	return
 }
 
-func (str *Text) FrekvenceSlov() (fr map[string]uint64) { // frekvence slov
+func FrekvenceSlov(str *string) (fr map[string]uint64) { // frekvence slov
 	fr = make(map[string]uint64)
-	w := strings.Fields(string(*str))
+	w := strings.Fields(*str)
 	for _, s := range w {
 		fr[s]++
 	}
 	return
 }
 
-func (str *Text) Words() (w uint64) { // Spočítá slova v textu. dle WhiteSpace
+func Words(str *string) (w uint64) { // Spočítá slova v textu. dle WhiteSpace
 	var prevW bool = false
 	for i, s := range *str {
 		if isIn(s, whiteS) && prevW == true {
@@ -71,9 +53,9 @@ func (str *Text) Words() (w uint64) { // Spočítá slova v textu. dle WhiteSpac
 	return
 }
 
-func (str Text) Slabiky() (sl uint64) { // Spočítá slabiky
-	str = str.Stdr()
-	words := strings.Fields(string(str))
+func Slabiky(str string) (sl uint64) { // Spočítá slabiky
+	str = change.Stdr(&str)
+	words := strings.Fields(str)
 	for _, w := range words {
 		for i, c := range w {
 			switch {
@@ -108,7 +90,7 @@ func (str Text) Slabiky() (sl uint64) { // Spočítá slabiky
 	return
 }
 
-func (str *Text) Sentences() (se uint64) { // spočítá věty v textu, končí .;?;! a následuje whiteSpace
+func Sentences(str *string) (se uint64) { // spočítá věty v textu, končí .;?;! a následuje whiteSpace
 	var prevE = false
 	for i, s := range *str {
 		if isIn(s, whiteS) && prevE {
@@ -125,14 +107,14 @@ func (str *Text) Sentences() (se uint64) { // spočítá věty v textu, končí 
 	return
 }
 
-func (str *Text) Flesh() float64 { // spočítá Fleshův index čitelnosti
-	var sl float64 = float64(str.Slabiky())
-	var w float64 = float64(str.Words())
-	var se float64 = float64(str.Sentences())
+func Flesh(str *string) float64 { // spočítá Fleshův index čitelnosti
+	var sl float64 = float64(Slabiky(*str))
+	var w float64 = float64(Words(str))
+	var se float64 = float64(Sentences(str))
 	return 206.835 - (1.015 * (w / se)) - 84.6*(sl/w)
 }
 
-func (str *Text) Lines() (ln uint64) { // Spočítá řádky.
+func Lines(str *string) (ln uint64) { // Spočítá řádky.
 	for _, c := range *str {
 		if c == '\n' {
 			ln++
@@ -141,20 +123,6 @@ func (str *Text) Lines() (ln uint64) { // Spočítá řádky.
 	return
 }
 
-func (str *Text) Chars() uint64 { // Spočítá znaky.
+func Chars(str *string) uint64 { // Spočítá znaky.
 	return uint64(len(*str))
-}
-
-func (str *Text) AlphaD() { // Odstraní vše co není číslo || písmeno(ASCII) || bílý znak
-	reg, err := regexp.Compile("[^A-Za-z0-9 \t\n]+")
-	if err != nil {
-		log.Fatal("Nelze zkompilovat regex!")
-	}
-	*str = Text(reg.ReplaceAllString(string(*str), ""))
-}
-
-func (str *Text) RemoveWS() { // Odstraní bílé znaky
-	*str = Text(strings.Replace(string(*str), " ", "", -1))
-	*str = Text(strings.Replace(string(*str), "\t", "", -1))
-	*str = Text(strings.Replace(string(*str), "\n", "", -1))
 }
