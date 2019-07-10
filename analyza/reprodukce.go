@@ -8,12 +8,12 @@ import (
 const SLOVA = true
 const ZNAKY = false
 
-func (str *Text) Reproduct(what bool, combien, lenght uint64) string {
-	dict := str.analyse(what, combien)
+func Reproduct(str *string, what bool, combien, lenght uint64) string {
+	dict := analyse(str, what, combien)
 	return product(dict, what, combien, lenght)
 }
 
-func (str *Text) analyse(what bool, combien uint64) (dict map[string][]string) {
+func analyse(str *string, what bool, combien uint64) (dict map[string][]string) {
 	dict = make(map[string][]string)
 	if what == SLOVA {
 		words := strings.Fields(string(*str))
