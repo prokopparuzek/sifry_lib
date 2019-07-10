@@ -30,7 +30,7 @@ func (r *Rectangle) DecryptL(crypt *string) (plain string) {
 }
 
 func (r *Rectangle) CryptR(plain *string) (crypt string) {
-	str := []rune(*plain)
+	str := []rune(strings.Replace(*plain, "\n", "", -1))
 	for i := uint64(0); i < r.Height; i++ {
 		for j := uint64(0); j < r.Weight; j++ {
 			if j*r.Height+i < uint64(len(str)) {
