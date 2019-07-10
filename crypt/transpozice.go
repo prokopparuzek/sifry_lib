@@ -4,13 +4,17 @@ import (
 	"strings"
 )
 
-type Text string
+type Rectangle struct {
+	weight uint64
+	height uint64
+}
 
-func (plain *Text) RectangleC(w, h uint64) (crypt Text) {
-	for i := uint64(0); i < h; i++ {
-		for j := uint64(0); j < w; j++ {
-			if i*w+j < uint64(len(*plain)) {
-				crypt += Text([]rune(*plain)[i*w+j])
+func (r *Rectangle) crypt(plain *string) (crypt string) {
+	str := strings.Replace(*plain, "\n", "", -1)
+	for i := uint64(0); i < r.height; i++ {
+		for j := uint64(0); j < r.weight; j++ {
+			if i*r.weight+j < uint64(len(str)) {
+				crypt += string([]rune(str)[i*r.weight+j])
 			} else {
 				crypt += "x"
 			}
@@ -20,7 +24,7 @@ func (plain *Text) RectangleC(w, h uint64) (crypt Text) {
 	return
 }
 
-func (crypt *Text) RectangleD() (plain Text) {
-	plain = Text(strings.Replace(string(*crypt), "\n", "", -1))
+func (r *Rectangle) Decrypt(crypt *string) (plain string) {
+	plain = strings.Replace(*crypt, "\n", "", -1)
 	return
 }
