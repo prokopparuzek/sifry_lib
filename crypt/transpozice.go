@@ -160,7 +160,8 @@ func (height Teeth) Decrypt(in *string) (out string) {
 	index := 0
 	dir := true
 	crypt := make([][]rune, height)
-	tmp := strings.Split(*in, "\n")
+	trim := strings.TrimSpace(*in)
+	tmp := strings.Split(trim, "\n")
 	for i, s := range tmp {
 		crypt[i] = []rune(s)
 	}
