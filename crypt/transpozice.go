@@ -1,6 +1,8 @@
 package crypt
 
 import (
+	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -99,6 +101,7 @@ func TriangleD(in *string) (out string) {
 }
 
 func (weight Stairs) Crypt(in *string) (out string) {
+	*in = strings.Replace(*in, "\n", "", -1)
 	index := 0
 	str := []rune(*in)
 	for i := 0; ; i++ {
@@ -106,15 +109,24 @@ func (weight Stairs) Crypt(in *string) (out string) {
 			out += " "
 		}
 		for j := 0; j < int(weight); j++ {
-			if index == len(str) {
+			if index >= len(str) {
 				out += "X"
 			} else {
 				out += string(str[index])
 				index++
 			}
 		}
+		if index >= len(str) {
+			break
+		}
 		out += "\n"
 	}
+	return
+}
+func (weight Stairs) Decrypt(in *string) (out string) {
+	out = strings.Replace(*in, "\n", "", -1)
+	r, _ := regexp.Compile(fmt.Sprintf(" {%d}", weight))
+	out = r.ReplaceAllString(out, "")
 	return
 }
 
