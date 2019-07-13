@@ -13,6 +13,7 @@ type Rectangle struct {
 
 type Teeth uint64
 type Stairs uint64
+type Snake uint64
 
 func (r *Rectangle) CryptL(plain *string) (crypt string) {
 	str := strings.Replace(*plain, "\n", "", -1)
@@ -191,6 +192,91 @@ func (height Teeth) Decrypt(in *string) (out string) {
 			if index == -1 {
 				dir = true
 				index = 1
+			}
+		}
+	}
+	return
+}
+
+func (height Snake) Crypt(in *string) (out string) {
+	*in = strings.Replace(*in, "\n", "", -1)
+	crypt := make([][]rune, height)
+	indexH := 0
+	indexW := 0
+	dir := true
+	for i := 0; i < int(height); i++ {
+		crypt[i] = make([]rune, 2*len([]rune(*in))/(int(height)+1))
+	}
+	for _, c := range *in {
+		if dir {
+			if indexH == int(height) {
+				indexW++
+				indexH--
+				crypt[indexH][indexW] = c
+				indexW++
+				dir = false
+			} else {
+				crypt[indexH][indexW] = c
+				indexH++
+			}
+		} else {
+			if indexH == -1 {
+				indexW++
+				indexH++
+				crypt[indexH][indexW] = c
+				indexW++
+				dir = true
+			} else {
+				crypt[indexH][indexW] = c
+				indexH--
+			}
+		}
+	}
+	for _, ar := range crypt {
+		for _, c := range ar {
+			if c == 0 {
+				out += " "
+			} else {
+				out += string(c)
+			}
+		}
+		out += "\n"
+	}
+	return
+}
+
+func (height Snake) Decrypt(in *string) (out string) {
+	indexH := 0
+	indexW := 0
+	dir := true
+	crypt := make([][]rune, height)
+	trim := strings.TrimSpace(*in)
+	tmp := strings.Split(trim, "\n")
+	for i, s := range tmp {
+		crypt[i] = []rune(s)
+	}
+	for i := 0; i < len(crypt[0])/2+int(height)*len(crypt[0])/2; i++ {
+		if dir {
+			if indexH == int(height) {
+				indexW++
+				indexH--
+				out += string(crypt[indexH][indexW])
+				indexW++
+				dir = false
+			} else {
+				out += string(crypt[indexH][indexW])
+				indexH++
+			}
+		} else {
+			if indexH == -1 {
+				indexW++
+				indexH++
+				out += string(crypt[indexH][indexW])
+				indexW++
+				dir = true
+			} else {
+				out += string(crypt[indexH][indexW])
+				indexH--
 			}
 		}
 	}
