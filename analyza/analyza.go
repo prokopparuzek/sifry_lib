@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-var samohlasky = []rune{'a', 'e', 'i', 'o', 'u'}
-var souhlasky = []rune{'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'v', 'z'}
-var slabtvrsouh = []rune{'r', 'l'}   // slabikotvorné souhlásky
+var samohlasky = []rune{'A', 'E', 'I', 'O', 'U'}
+var souhlasky = []rune{'B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'V', 'Z'}
+var slabtvrsouh = []rune{'R', 'L'}   // slabikotvorné souhlásky
 var konce = []rune{'.', '!', '?'}    // Konce vět
 var whiteS = []rune{' ', '\n', '\t'} // bílé znaky
 
