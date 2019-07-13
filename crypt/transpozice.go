@@ -285,6 +285,7 @@ func (height Snake) Decrypt(in *string) (out string) {
 	return
 }
 
+// TODO init rand by time
 func (dist Jump) CryptNS(in *string) (out string) { // každý n,začíná písmeno zprávy
 	*in = strings.Replace(*in, "\n", "", -1)
 	for _, c := range *in {
