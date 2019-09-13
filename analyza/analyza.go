@@ -1,7 +1,7 @@
 package analyza
 
 import (
-	"prokop/sifry/change"
+	"github.com/prokopparuzek/sifry_lib/change"
 	"strings"
 )
 
