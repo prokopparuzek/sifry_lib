@@ -27,10 +27,10 @@ func isMn(r rune) bool {
 	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
 }
 
-func Stdr(in *string) (out string) { // převede na malá písmena a pouze ASCII
+func Stdr(in *string) (out string) { // převede na velká písmena a pouze ASCII
 	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
 	tmp, _, _ := transform.String(t, *in)
 	out = tmp
-	out = strings.ToLower(out)
+	out = strings.ToUpper(out)
 	return
 }
