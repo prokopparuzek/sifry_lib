@@ -2,6 +2,7 @@ package crypt
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"regexp"
 	"strings"
@@ -91,11 +92,30 @@ func Triangle90(in *string) (out string) {
 	return
 }
 
-/* TODO
-func Triangle(in *string) (out string) {
+func Triangle(in *string) (out string) { // Vytvoří trojúhelník
+	var levels uint
+	var index uint
+	str := []rune(*in)
 
+	l1 := (-1 + math.Sqrt(float64(1+4*len(*in))))
+	l2 := (-1 - math.Sqrt(float64(1+4*len(*in))))
+	if l1 >= 0 {
+		levels = uint(math.Round(l1))
+	} else {
+		levels = uint(math.Round(l2))
+	}
+	for i := uint(0); i < levels; levels++ {
+		for j := i + 1; j < levels; j++ {
+			out += " "
+		}
+		for j := levels - i; j > 0; j-- {
+			out += string(str[index])
+			index++
+			out += "\n"
+		}
+	}
 	return
-}*/
+}
 
 func TriangleD(in *string) (out string) {
 	out = strings.Replace(*in, "\n", "", -1)
