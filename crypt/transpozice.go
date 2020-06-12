@@ -9,7 +9,7 @@ import (
 )
 
 type Rectangle struct {
-	Weight uint64
+	Width  uint64
 	Height uint64
 }
 
@@ -21,9 +21,9 @@ type Jump uint64
 func (r *Rectangle) CryptL(plain *string) (crypt string) {
 	str := strings.Replace(*plain, "\n", "", -1)
 	for i := uint64(0); i < r.Height; i++ {
-		for j := uint64(0); j < r.Weight; j++ {
-			if i*r.Weight+j < uint64(len(str)) {
-				crypt += string([]rune(str)[i*r.Weight+j])
+		for j := uint64(0); j < r.Width; j++ {
+			if i*r.Width+j < uint64(len(str)) {
+				crypt += string([]rune(str)[i*r.Width+j])
 			} else {
 				crypt += "X"
 			}
@@ -41,7 +41,7 @@ func (r *Rectangle) DecryptL(crypt *string) (plain string) {
 func (r *Rectangle) CryptR(plain *string) (crypt string) {
 	str := []rune(strings.Replace(*plain, "\n", "", -1))
 	for i := uint64(0); i < r.Height; i++ {
-		for j := uint64(0); j < r.Weight; j++ {
+		for j := uint64(0); j < r.Width; j++ {
 			if j*r.Height+i < uint64(len(str)) {
 				crypt += string(str[j*r.Height+i])
 			} else {
@@ -56,7 +56,7 @@ func (r *Rectangle) CryptR(plain *string) (crypt string) {
 func (r *Rectangle) DecryptR(crypt *string) (plain string) {
 	str := []rune(strings.Replace(*crypt, "\n", "", -1))
 	for i := uint64(0); i < r.Height; i++ {
-		for j := uint64(0); j < r.Weight; j++ {
+		for j := uint64(0); j < r.Width; j++ {
 			plain += string(str[j*r.Height+i])
 		}
 	}
