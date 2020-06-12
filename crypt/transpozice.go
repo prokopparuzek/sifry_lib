@@ -1,9 +1,10 @@
 package crypt
 
 import (
+	"crypto/rand"
 	"fmt"
 	"math"
-	"math/rand"
+	"math/big"
 	"regexp"
 	"strings"
 )
@@ -305,13 +306,14 @@ func (height Snake) Decrypt(in *string) (out string) {
 	return
 }
 
-// TODO init rand by time
 func (dist Jump) CryptNS(in *string) (out string) { // každý n,začíná písmeno zprávy
+	letter := &big.Int{}
 	*in = strings.Replace(*in, "\n", "", -1)
 	for _, c := range *in {
 		out += string(c)
 		for j := 1; j < int(dist); j++ {
-			out += string(rand.Intn(25) + 65)
+			letter, _ = rand.Int(rand.Reader, big.NewInt(25))
+			out += string(letter.Int64() + 65)
 		}
 	}
 	return
